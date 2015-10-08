@@ -19,10 +19,10 @@
 ### MA 02110-1301, USA
 
 
-gvisChart <- function(type, checked.data, options, chartid, package, formats = NULL){
+gvisChart <- function(type, checked.data, options, chartid, package, formats = NULL,shinyid="") {
   
   Chart = gvis(type=type, checked.data, options=options, 
-               chartid=chartid, package, formats=formats)
+               chartid=chartid, package, formats=formats, shinyid=shinyid)
   chartid <- Chart$chartid
   htmlChart <- Chart$chart
   
@@ -43,7 +43,7 @@ gvisChart <- function(type, checked.data, options, chartid, package, formats = N
   return(output)
 }
 
-gvis <- function(type="", data, options, chartid, package, formats=NULL){
+gvis <- function(type="", data, options, chartid, package, formats=NULL,shinyid=""){
   
   if( ! is.data.frame(data) ){
     stop("Data has to be a data.frame. See ?data.frame for more details.")
@@ -208,7 +208,7 @@ var options = {};
                          jsFormats,
                          gvisNewChart(chartid,type,options),
                          gvisListener(chartid, type, options),
-                         gvisEditor(chartid,type,options)
+                         gvisEditor(chartid,type,options,shinyid)
   )
   
   jsFooter  <- '
@@ -461,20 +461,35 @@ gvisCheckData <- function(data="", options=list(), data.structure=list()){
   return(x)
 }
 
-gvisEditor <- function(chartid,type,options){
+gvisEditor <- function(chartid,type,options,shinyid){
   if(is.null(options$gvis$gvis.editor))
     return('')
-  jseditor <- "
+  jseditor <- paste("
   function openEditor%s() {
   var editor = new google.visualization.ChartEditor();
   google.visualization.events.addListener(editor, 'ok',
   function() { 
-  chart%s = editor.getChartWrapper();  
-  chart%s.draw(document.getElementById('%s')); 
+  wrap = editor.getChartWrapper();  
+  
+
+    var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x = w.innerWidth || e.clientWidth || g.clientWidth,
+    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+  wrap.setOption('width',x * (9/12));
+  wrap.setOption('heigth',400);
+
+  console.log('gviswrapper'+'",shinyid,"');
+  Shiny.onInputChange('gviswrapper'+'",shinyid,"', wrap);
+  wrap.draw(document.getElementById('%s')); 
+
   }); 
   editor.openDialog(chart%s);
   }
-  "
+  ",sep="")
   sprintf(jseditor,chartid,chartid,chartid,chartid,chartid)
   }
 
@@ -522,7 +537,7 @@ gvisListener <- function(chartid, type, options=list(gvis=list(gvis.listener.jsc
 }
 
 
-gvisOptions <- function(options=list(gvis=list(width = 600, height=500))){
+gvisOptions <- function(options=list(gvis=list(width = 1000, height=500))){
   options <- options$gvis
   # wipe out options with start with gvis.
   options[grep("^gvis.",names(options))] <- NULL

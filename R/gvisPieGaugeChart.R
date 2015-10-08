@@ -87,7 +87,7 @@
 #' 
 #' 
 #' 
-gvisPieChart <- function(data, labelvar="", numvar="", options=list(), chartid){
+gvisPieChart <- function(data, labelvar="", numvar="", options=list(),shinyid="", chartid){
 
   my.type <- "PieChart"
   dataName <- deparse(substitute(data))
@@ -101,7 +101,7 @@ gvisPieChart <- function(data, labelvar="", numvar="", options=list(), chartid){
   checked.data <- gvisCheckPieChartData(data, my.options)
   
   output <- gvisChart(type=my.type, checked.data=checked.data, options=my.options,
-                      chartid=chartid, package="corechart") 
+                      chartid=chartid, package="corechart",shinyid=shinyid) 
   
   return(output)
 }

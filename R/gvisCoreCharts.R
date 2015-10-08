@@ -118,14 +118,14 @@
 #'                        ))
 #' plot(Dashed)
 #' 
-gvisLineChart <- function(data, xvar="", yvar="", options=list(), 
+gvisLineChart <- function(data, xvar="", yvar="",shinyid="", options=list(), 
                           chartid){##, editor
 
   ##  if(!missing(editor)){
   ##   options=list(options, gvis.editor=editor) 
   ## }
   gvisCoreChart(data, xvar, yvar, options, chartid, 
-                chart.type="LineChart")
+                chart.type="LineChart",shinyid=shinyid)
 }
 
 
@@ -211,11 +211,11 @@ gvisLineChart <- function(data, xvar="", yvar="", options=list(),
 #' plot(Area3)
 #' }
 #' 
-gvisAreaChart <- function(data, xvar="", yvar="", options=list(), 
+gvisAreaChart <- function(data, xvar="", yvar="", shinyid="",options=list(), 
                           chartid){
   
   gvisCoreChart(data, xvar, yvar, options, chartid, 
-                chart.type="AreaChart")
+                chart.type="AreaChart",shinyid=shinyid)
 }
 
 
@@ -414,11 +414,11 @@ gvisSteppedAreaChart <- function(data, xvar="", yvar="",
 #' 
 #' }
 #' 
-gvisBarChart <- function(data, xvar="", yvar="", options=list(), 
-                         chartid){
+gvisBarChart <- function(data, xvar="", yvar="", shinyid="",options=list(), 
+                         chartid) {
   
   gvisCoreChart(data, xvar, yvar, options, chartid, 
-                chart.type="BarChart")
+                chart.type="BarChart",shinyid=shinyid)
 }
 
 
@@ -504,11 +504,11 @@ gvisBarChart <- function(data, xvar="", yvar="", options=list(),
 #' }
 #' 
 #' 
-gvisColumnChart <- function(data, xvar="", yvar="", options=list(), 
+gvisColumnChart <- function(data, xvar="", yvar="",shinyid="", options=list(), 
                             chartid){
   
   gvisCoreChart(data, xvar, yvar, options, chartid, 
-                chart.type="ColumnChart")
+                chart.type="ColumnChart",shinyid=shinyid)
 }
 
 
@@ -837,7 +837,7 @@ gvisCheckScatterChartData <- function(data){
 
 
 gvisCoreChart <- function(data, xvar="", yvar="", options=list(), 
-                          chartid, chart.type){
+                          chartid, chart.type, shinyid=""){
   
   if(!is.data.frame(data)){
     stop("Error: data has to be a data.frame.")
@@ -856,7 +856,7 @@ gvisCoreChart <- function(data, xvar="", yvar="", options=list(),
   checked.data <- gvisCheckCoreChartData(data, xvar=xvar, yvar=yvar)
 
   
-  output <- gvisChart(type=chart.type, checked.data=checked.data, options=my.options, chartid=chartid, package="corechart") 
+  output <- gvisChart(type=chart.type, checked.data=checked.data, options=my.options, chartid=chartid, package="corechart",shinyid=shinyid) 
   
   return(output)
 }

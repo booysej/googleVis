@@ -208,7 +208,7 @@
 #' plot(G9)
 #' }
 #' 
-gvisGeoChart <- function(data, locationvar="", ## numvar="",
+gvisGeoChart <- function(data, locationvar="", shinyid="", ## numvar="",
                          colorvar="", sizevar="",
                          hovervar="",
                          options=list(), chartid){
@@ -233,7 +233,7 @@ gvisGeoChart <- function(data, locationvar="", ## numvar="",
   if(any("numeric" %in% lapply(checked.data[,1], class))){
     my.options <- modifyList(list(gvis=list()), my.options)
   }
-  output <- gvisChart(type=my.type, checked.data=checked.data, options=my.options, chartid=chartid)
+  output <- gvisChart(type=my.type, checked.data=checked.data, options=my.options, chartid=chartid,shinyid=shinyid)
   
   return(output)
 }
